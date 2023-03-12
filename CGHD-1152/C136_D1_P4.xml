@@ -1,0 +1,136 @@
+<annotation>
+    <folder>files</folder>
+    <filename>C136_D1_P4.jpg</filename>
+    <path>./files/C136_D1_P4.jpg</path>
+    <source>
+        <database>Unknown</database>
+    </source>
+    <size>
+        <width>1383</width>
+        <height>1368</height>
+        <depth>3</depth>
+    </size>
+    <segmented>0</segmented>
+    <object>
+        <name>text</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>144</xmin>
+            <ymin>539</ymin>
+            <xmax>276</xmax>
+            <ymax>581</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>junction</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>926</xmin>
+            <ymin>708</ymin>
+            <xmax>958</xmax>
+            <ymax>741</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>junction</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>396</xmin>
+            <ymin>717</ymin>
+            <xmax>426</xmax>
+            <ymax>747</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>text</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>596</xmin>
+            <ymin>251</ymin>
+            <xmax>780</xmax>
+            <ymax>335</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>text</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>154</xmin>
+            <ymin>474</ymin>
+            <xmax>228</xmax>
+            <ymax>511</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>resistor</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>929</xmin>
+            <ymin>494</ymin>
+            <xmax>968</xmax>
+            <ymax>599</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>text</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>985</xmin>
+            <ymin>485</ymin>
+            <xmax>1179</xmax>
+            <ymax>544</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>junction</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>931</xmin>
+            <ymin>350</ymin>
+            <xmax>972</xmax>
+            <ymax>388</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>junction</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>383</xmin>
+            <ymin>377</ymin>
+            <xmax>407</xmax>
+            <ymax>399</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>switch</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>676</xmin>
+            <ymin>310</ymin>
+            <xmax>806</xmax>
+            <ymax>388</ymax>
+        </bndbox>
+    </object>    <object>
+        <name>voltage.dc</name>
+        <pose>Unspecified</pose>
+        <truncated>0</truncated>
+        <difficult>0</difficult>
+        <bndbox>
+            <xmin>319</xmin>
+            <ymin>466</ymin>
+            <xmax>458</xmax>
+            <ymax>537</ymax>
+        </bndbox>
+    </object>
+</annotation>
