@@ -1,78 +1,81 @@
 # Imports
 import os
+import gc
+import json
 import matplotlib.pyplot as plt
 import numpy as np
-import cv2  # Image processing library - OpenCV
+
+# Image processing library - OpenCV
+import cv2  
 
 data_path = "CGHD-1152"
 
-def cropAndResize(data_path, start_num, end_num):
-    images = [os.path.join(data_path, f) for f in os.listdir(data_path) if f.endswith('.jpg')]
-    image_names = [f for f in os.listdir(data_path) if f.endswith('.jpg')]
+def preprocess():
+    # Get all the circuit images - (element 1: full path to circuit image file, element 2: just the name of the circuit image file)
+    images = [(os.path.join(data_path, f), f) for f in os.listdir(data_path) if (f.endswith('.jpg'))]
+    images.sort()     # may come in handy later
 
-    images.sort()
-    image_names.sort()
-    # print(images)
-    images.sort()
-    image_names.sort()
-    # print(images)
+    # Load dictionary that describes how each circuit will be preprocessed
+    circuit_to_ppp = dict()
 
-    # Plot the images in rows of 9
-    for i in range(start_num, end_num, 9):
-    # Figsize=(width in inches, length in inches)
-        fig, ax = plt.subplots(1, 9, figsize=(60, 40))
+    with open('circuit_preprocessing_parameters.json', 'r') as f:
+        json_str = f.read()
 
-    # Indicator to tell us how many more rows need to be printed
-    # There are a total of 128 rows
-        # print("Row: ", (i//9) +1)
+    circuit_to_ppp = json.loads(json_str)
 
-        for j in range(9):
-            if i+j >= len(images):
-                ax[j].axis('off')
-                continue
+    # Create set to track preprocessing progress
+    try:
+        processed_circuits = set(os.listdir(os.getcwd() + "\\Processed"))
+    except:
+        os.mkdir("Processed")
+        processed_circuits = set()
 
-            # Load the image and convert to RGB color space
-            # Note: OpenCV loads images in BGR color space so we need to convert to RGB
-            curr_img = cv2.imread(images[i+j])
-            curr_img = cv2.cvtColor(curr_img, cv2.COLOR_BGR2GRAY)
+    # Loop through images, preprocess and save to folder
+    for (circuit_file, circuit_name) in images:
+        # Clear ram so that we don't encounter memory issues
+        gc.collect()
 
-            # Testing out image processing stuff
-            edges = cv2.Canny(curr_img, 100, 150)
-            
-            # Padding images
-            # Get the dimensions of the image
-            height, width = edges.shape
+        # Check that we didn't already process this image - save on computations
+        if os.path.exists("Processed/" + circuit_name):
+            continue
 
-            # Find the greater dimension
-            greater_dim = max(height, width)
+        # Print progress check
+        print("Currently processing file {0}/1152...".format(len(processed_circuits) + 1))
+        processed_circuits.add(circuit_name)
 
-            # Create a blank image with the greater dimension
-            padded_img = np.ones((greater_dim, greater_dim), dtype=np.uint8) * 0
+        # Get the ID of the current circuit to access its preprocessing parameters from dict
+        circuit_id = circuit_name.split("_")[0] + "_"
 
-            # Calculate the offsets for the original image
-            x_offset = (greater_dim - width) // 2
-            y_offset = (greater_dim - height) // 2
+        # Load the image and convert to grayscale color space
+        # Note: OpenCV loads images in BGR color space
+        curr_img = cv2.imread(circuit_file)
+        curr_img = cv2.cvtColor(curr_img, cv2.COLOR_BGR2GRAY)
 
-            # Copy the original image onto the padded image with the offset
-            padded_img[y_offset:y_offset+height, x_offset:x_offset+width] = edges
+        # Apply adaptive thresholding to get rid of background colors, creases, and only remain with actual circuit
+        thresholded_img = cv2.adaptiveThreshold(curr_img, 
+                                                255, 
+                                                cv2.ADAPTIVE_THRESH_MEAN_C,
+                                                cv2.THRESH_BINARY,
+                                                circuit_to_ppp[circuit_id][0],
+                                                circuit_to_ppp[circuit_id][1])
+        
+        # Apply median blur to get rid of "salt and pepper" noise
+        processed_img = cv2.medianBlur(thresholded_img, circuit_to_ppp[circuit_id][2])
 
-            # Resize to 1024*1024
-            resized_padded_img = cv2.resize(padded_img, (1024, 1024), cv2.INTER_NEAREST)
+        # Invert the image so that the circuits are labelled as 255 while background is 0
+        processed_img = cv2.bitwise_not(processed_img)
 
-            ax[j].imshow(resized_padded_img)
+        # Normalize so that instead of 0 & 255, values are 0 & 1, also float
+        processed_img = processed_img / 255.0
 
-            # Remove all y-axis ticks and labels
-            ax[j].yaxis.set_ticks([])
-            ax[j].yaxis.set_ticklabels([])
-            ax[j].xaxis.set_ticks([])
-            ax[j].xaxis.set_ticklabels([])
+        # Save processed image if not processed before
+        cv2.imwrite("Processed/" + circuit_name, processed_img)
 
-            # Remove the top and right spines
-            ax[j].spines['top'].set_visible(False)
-            ax[j].spines['right'].set_visible(False)
+        # If you want to see what the final processed image looks like, uncomment this code
+        #plt.imshow(processed_img)
+        #plt.show()
+    
+    print("\nDone Processing!")
 
-            ax[j].set_xlabel(image_names[i+j])
-
-    plt.show()
-
-cropAndResize(data_path, 0, 18)
+if __name__ == "__main__":
+    preprocess()
